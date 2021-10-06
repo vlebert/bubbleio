@@ -6,7 +6,7 @@ from setuptools import find_packages, setup
 from bubblepy import __about__
 
 setup(
-    name="sqlitetoairtable",
+    name="bubbleio",
     version=__about__.__version__,
     author=__about__.__author__,
     author_email=__about__.__email__,
@@ -18,6 +18,6 @@ setup(
     ),
     include_package_data=True,
     install_requires=[
-        "requests<=2.24,<2.27",
+        "requests",
     ],
 )

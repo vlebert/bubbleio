@@ -24,9 +24,9 @@ __email__ = ""
 __executable_name__ = ""
 __license__ = ""
 __summary__ = "Python tools to query Bubblio.io API."
-__title__ = "BubblePy"
+__title__ = "Bubbleio"
 __title_clean__ = "".join(e for e in __title__ if e.isalnum())
-__uri__ = "https://github.com/vlebert/bubbleby/"
+__uri__ = "https://github.com/vlebert/bubbleio/"
 
 __version__ = "0.1"
 __version_info__ = tuple(

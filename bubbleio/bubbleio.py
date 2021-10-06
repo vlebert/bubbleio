@@ -2,7 +2,7 @@ import requests
 import logging
 
 
-class Bubblepy:
+class Bubbleio:
     api_key = ""
     api_root = ""
     logger = logging.getLogger(__name__)
@@ -14,7 +14,7 @@ class Bubblepy:
     def headers(self):
         return {"Authorization": "Bearer " + self.api_key}
 
-    def get_table(self, tablename):
+    def get(self, tablename):
         r = requests.get(self.api_root + "/" + tablename, headers=self.headers())
         remaining = r.json()["response"]["remaining"]
         records = r.json()["response"]["results"]
