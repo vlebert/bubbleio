@@ -20,6 +20,4 @@ setup(
     install_requires=[
         "requests<=2.24,<2.27",
     ],
-    entry_points="""
-    """,
 )

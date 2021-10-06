@@ -26,7 +26,7 @@ __license__ = ""
 __summary__ = "Python tools to query Bubblio.io API."
 __title__ = "BubblePy"
 __title_clean__ = "".join(e for e in __title__ if e.isalnum())
-__uri__ = "https://github.com/vlebert/bubblepy/"
+__uri__ = "https://github.com/vlebert/bubbleby/"
 
 __version__ = "0.1"
 __version_info__ = tuple(
