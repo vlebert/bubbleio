@@ -3,7 +3,7 @@
 from setuptools import find_packages, setup
 
 # package (to get version)
-from bubblepy import __about__
+from bubbleio import __about__
 
 setup(
     name="bubbleio",
