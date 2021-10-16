@@ -1,5 +1,7 @@
-# Bubblepy
+# Bubbleio Python API
 
-This package will be a toolset to querry Bubble.io apps API.
+This python package is a toolset to handel Bubble.io API in python scripts.
 
-https://manual.bubble.io/core-resources/api/data-apigit 
+**Bubble.io API documentation** : https://manual.bubble.io/core-resources/api/data-api
+
+**Package documentation** : 
