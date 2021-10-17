@@ -137,6 +137,3 @@ dmypy.json
 test.py
 *.xlsx
 
-# Sphinx documentation
-docs/_build/
-docs/_apidoc/

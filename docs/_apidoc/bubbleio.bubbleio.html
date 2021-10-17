@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bubbleio.bubbleio module &mdash; Bubbleio 0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="bubbleio package" href="bubbleio.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Bubbleio
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Package documenation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">bubbleio</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="bubbleio.html">bubbleio package</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">bubbleio.bubbleio module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Bubbleio</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">bubbleio</a> &raquo;</li>
+          <li><a href="bubbleio.html">bubbleio package</a> &raquo;</li>
+      <li>bubbleio.bubbleio module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_apidoc/bubbleio.bubbleio.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-bubbleio.bubbleio">
+<span id="bubbleio-bubbleio-module"></span><h1>bubbleio.bubbleio module<a class="headerlink" href="#module-bubbleio.bubbleio" title="Permalink to this headline"></a></h1>
+<p>This module contans Bubbleio class to handle Bubble.io API.</p>
+<p><a class="reference external" href="https://manual.bubble.io/core-resources/api/data-api">https://manual.bubble.io/core-resources/api/data-api</a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="bubbleio.bubbleio.Bubbleio">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">bubbleio.bubbleio.</span></span><span class="sig-name descname"><span class="pre">Bubbleio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_root</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bubbleio.bubbleio.Bubbleio" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Instantiate a Bubbleio object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>api_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Your Bubble.io API Key to the specific app. Don’t forget to
+enable API in yout Bubble app in <cite>Settings &gt; API</cite>. You can also get an
+API token from there.</p></li>
+<li><p><strong>api_root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The root URL of the API. Currently, the API root is generally
+<cite>https://appname.bubbleapps.io/api/1.1/obj</cite>. It can also depends if you
+have a custom domain name.</p></li>
+<li><p><strong>Returns</strong> – Bubbleio: Instance of Bubbleio.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="bubbleio.bubbleio.Bubbleio.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cursor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bubbleio.bubbleio.Bubbleio.get" title="Permalink to this definition"></a></dt>
+<dd><p>Use this call to retrieve a list of things of a given type.
+By default, all GET requests return the first 100 items in the list, unless you
+a lesser <cite>limit</cite> argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>typename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The type of “things” you are querying.</p></li>
+<li><p><strong>limit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Use <cite>limit</cite> to specify the number of items you want in the response.
+The default and maximum allowed is 100. Use cursor to specify where to start.</p></li>
+<li><p><strong>cursor</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – This is the rank of the first item in the list.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Returns a decoded JSON as documented in Bubble.io API documentation :</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>’cursor’: This is the rank of the first item in the list,</p></li>
+<li><p>’results’: The list of the results,</p></li>
+<li><p>’count’: This is the number of items in the current response,</p></li>
+<li><p>’remaining’: his is the number of remaining items after the current response. Use this for the next call</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bubbleio.bubbleio.Bubbleio.get_all">
+<span class="sig-name descname"><span class="pre">get_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bubbleio.bubbleio.Bubbleio.get_all" title="Permalink to this definition"></a></dt>
+<dd><p>Get all intems of one “things” type. The function iterates with limit and cursor
+to get all items</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>typename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The type of “things” you are querying.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The list of all items of the type.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bubbleio.bubbleio.Bubbleio.headers">
+<span class="sig-name descname"><span class="pre">headers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bubbleio.bubbleio.Bubbleio.headers" title="Permalink to this definition"></a></dt>
+<dd><p>Returns headers including authentication</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bubbleio.bubbleio.Bubbleio.logger">
+<span class="sig-name descname"><span class="pre">logger</span></span><em class="property"> <span class="pre">=</span> <span class="pre">&lt;Logger</span> <span class="pre">bubbleio.bubbleio</span> <span class="pre">(WARNING)&gt;</span></em><a class="headerlink" href="#bubbleio.bubbleio.Bubbleio.logger" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="bubbleio.html" class="btn btn-neutral float-left" title="bubbleio package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020 - 2021, Valérian LEBERT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
