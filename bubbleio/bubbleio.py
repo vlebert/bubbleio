@@ -1,5 +1,5 @@
 """
-This module contans Bubbleio class to handel Bubble.io API.
+This module contans Bubbleio class to handle Bubble.io API.
 
 https://manual.bubble.io/core-resources/api/data-api
 """
