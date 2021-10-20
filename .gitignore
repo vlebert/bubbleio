@@ -135,6 +135,7 @@ dmypy.json
 #############
 
 test.py
+test.ipynb
 *.xlsx
 
 memo.md
