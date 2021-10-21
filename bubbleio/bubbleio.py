@@ -10,10 +10,6 @@ import pandas as pd
 
 
 class Bubbleio:
-    # api_key = ""
-    # api_root = ""
-    logger = logging.getLogger(__name__)
-
     def __init__(self, api_key, api_root):
         """Instantiate a Bubbleio object
 
@@ -26,12 +22,32 @@ class Bubbleio:
                             have a custom domain name.
             Returns:
                 Bubbleio: Instance of Bubbleio.
+
+            Examples:
+
+                >>> from bubbleio import Bubbleio
+                >>> API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                >>> API_ROOT = "https://appname.bubbleapps.io/api/1.1/obj"
+                >>> bbio = Bubbleio(API_KEY, API_ROOT)
         """
         self.api_key = api_key
         self.api_root = api_root
+        self.logger = logging.getLogger(__name__)
 
     def headers(self):
-        """Returns headers including authentication"""
+        """Returns headers including authentication
+
+        Note : considering passing as private method.
+
+        Examples:
+
+            >>> from bubbleio import Bubbleio
+            >>> API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            >>> API_ROOT = "https://appname.bubbleapps.io/api/1.1/obj"
+            >>> bbio = Bubbleio(API_KEY, API_ROOT)
+            >>> bbio.header()
+            {'Authorization': 'Bearer xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'}
+        """
         return {"Authorization": "Bearer " + self.api_key}
 
     def get(self, typename, limit=None, cursor=None):
@@ -54,6 +70,32 @@ class Bubbleio:
                     - results: The list of the results,
                     - count: This is the number of items in the current response,
                     - remaining: his is the number of remaining items after the current response. Use this for the next call
+
+        Examples:
+
+                >>> from bubbleio import Bubbleio
+                >>> API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                >>> API_ROOT = "https://appname.bubbleapps.io/api/1.1/obj"
+                >>> bbio = Bubbleio(API_KEY, API_ROOT)
+                >>> bbio.get("foo_type")
+                {
+                    "cursor": 0,
+                    "results": [
+                        {
+                            "foo_field_1": "value",
+                            "foo_field_2": "value",
+                            "_id": "item1_bubble_id"
+                        },
+                        {
+                            "foo_field_1": "value",
+                            "foo_field_2": "value",
+                            "_id": "item2_bubble_id"
+                        },
+                        ...
+                    ],
+                    "remaining": 0,
+                    "count": 31
+                }
         """
         self.logger.debug(
             "GET call on type %s with limit %s and cursor %s"
@@ -82,6 +124,27 @@ class Bubbleio:
 
         Returns:
             List: The list of all items of the type.
+
+        Examples:
+
+                >>> from bubbleio import Bubbleio
+                >>> API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                >>> API_ROOT = "https://appname.bubbleapps.io/api/1.1/obj"
+                >>> bbio = Bubbleio(API_KEY, API_ROOT)
+                >>> bbio.get_results("foo_type")
+                [
+                    {
+                        "foo_field_1": "value",
+                        "foo_field_2": "value",
+                        "_id": "item1_bubble_id"
+                    },
+                    {
+                        "foo_field_1": "value",
+                        "foo_field_2": "value",
+                        "_id": "item2_bubble_id"
+                    },
+                    ...
+                ]
         """
         return self.get(typename, limit=limit, cursor=cursor)["results"]
 

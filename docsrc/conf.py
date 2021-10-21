@@ -47,11 +47,12 @@ extensions = [
     "sphinx_autodoc_typehints",
     "sphinx_copybutton",
     "sphinx_markdown_tables",
-    "sphinx_rtd_theme",
+    "revitron_sphinx_theme",
     # Parser for google style ant nympy style docstrings
     "sphinxcontrib.napoleon",
 ]
 autoclass_content = "both"
+autodoc_member_order = "bysource"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -77,7 +78,7 @@ exclude_patterns = ["_build", ".venv", "Thumbs.db", ".DS_Store", "_output"]
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"
+html_theme = "pydata_sphinx_theme"
 html_sidebars = {
     "**": ["globaltoc.html", "relations.html", "sourcelink.html", "searchbox.html"]
 }

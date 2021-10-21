@@ -8,12 +8,6 @@
 :Package version: |version|
 :Documentation update: |date|
 
-Index
-=====
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
 
 .. toctree::
    :maxdepth: 4
