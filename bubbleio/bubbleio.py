@@ -218,10 +218,11 @@ class Bubbleio:
         Args:
             typename (str): The type of "things" you are querying..
             list_fields(list): The list of fields to returns in the DataFrame. All other fields will
-                                be removed from the DataFrame. If None, all fields are returned.
-                                Cant't be use in combination with mask_fields.
+                               be removed from the DataFrame. If None, all fields are returned. This
+                               option also allow to order the columns.
+                               Cant't be use in combination with mask_fields.
             mask_fields(list): The list of fields to remove from the DataFrame.
-                                Cant't be use in combination with mask_fields.
+                               Cant't be use in combination with mask_fields.
             joins(list): List of dicts giving the parameters of the joins to be made. Dict must have
                          these Items :
 
@@ -240,7 +241,7 @@ class Bubbleio:
         else:
             df = pd.DataFrame(self.get_all_results(typename))
             if list_fields:
-                df = df.loc[:, df.columns.isin(list_fields)]
+                df = df[list_fields]
             elif mask_fields:
                 df = df.loc[:, ~df.columns.isin(mask_fields)]
 
