@@ -73,29 +73,29 @@ class Bubbleio:
 
         Examples:
 
-                >>> from bubbleio import Bubbleio
-                >>> API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-                >>> API_ROOT = "https://appname.bubbleapps.io/api/1.1/obj"
-                >>> bbio = Bubbleio(API_KEY, API_ROOT)
-                >>> bbio.get("foo_type")
-                {
-                    "cursor": 0,
-                    "results": [
-                        {
-                            "foo_field_1": "value",
-                            "foo_field_2": "value",
-                            "_id": "item1_bubble_id"
-                        },
-                        {
-                            "foo_field_1": "value",
-                            "foo_field_2": "value",
-                            "_id": "item2_bubble_id"
-                        },
-                        ...
-                    ],
-                    "remaining": 0,
-                    "count": 31
-                }
+            >>> from bubbleio import Bubbleio
+            >>> API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            >>> API_ROOT = "https://appname.bubbleapps.io/api/1.1/obj"
+            >>> bbio = Bubbleio(API_KEY, API_ROOT)
+            >>> bbio.get("foo_type")
+            {
+                "cursor": 0,
+                "results": [
+                    {
+                        "foo_field_1": "value",
+                        "foo_field_2": "value",
+                        "_id": "item1_bubble_id"
+                    },
+                    {
+                        "foo_field_1": "value",
+                        "foo_field_2": "value",
+                        "_id": "item2_bubble_id"
+                    },
+                    ...
+                ],
+                "remaining": 0,
+                "count": 31
+            }
         """
         self.logger.debug(
             "GET call on type %s with limit %s and cursor %s"
@@ -127,24 +127,24 @@ class Bubbleio:
 
         Examples:
 
-                >>> from bubbleio import Bubbleio
-                >>> API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-                >>> API_ROOT = "https://appname.bubbleapps.io/api/1.1/obj"
-                >>> bbio = Bubbleio(API_KEY, API_ROOT)
-                >>> bbio.get_results("foo_type")
-                [
-                    {
-                        "foo_field_1": "value",
-                        "foo_field_2": "value",
-                        "_id": "item1_bubble_id"
-                    },
-                    {
-                        "foo_field_1": "value",
-                        "foo_field_2": "value",
-                        "_id": "item2_bubble_id"
-                    },
-                    ...
-                ]
+            >>> from bubbleio import Bubbleio
+            >>> API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            >>> API_ROOT = "https://appname.bubbleapps.io/api/1.1/obj"
+            >>> bbio = Bubbleio(API_KEY, API_ROOT)
+            >>> bbio.get_results("foo_type")
+            [
+                {
+                    "foo_field_1": "value",
+                    "foo_field_2": "value",
+                    "_id": "item1_bubble_id"
+                },
+                {
+                    "foo_field_1": "value",
+                    "foo_field_2": "value",
+                    "_id": "item2_bubble_id"
+                },
+                ...
+            ]
         """
         return self.get(typename, limit=limit, cursor=cursor)["results"]
 
@@ -211,7 +211,7 @@ class Bubbleio:
         return df
 
     def get_all_results_as_df(
-        self, typename, list_fields=None, mask_fields=None, joins=None
+        self, typename, list_fields=None, mask_fields=None, joins=None, drop_id=True
     ):
         """Returns all results as a Pandas.DataFrame
 
@@ -230,9 +230,24 @@ class Bubbleio:
                          - typename: Name of the foreign table to be joined
                          - list_fields: same logic as above
                          - mask_fields: same logic as above
+            drop_id(boolean): If true, the column of the _id of foreign table will be dropped
+                              (columns corresponding to "field" item in "joins")
 
         Returns:
             Pandas.DataFrame: The list of all items of the type.
+
+        Examples:
+
+            >>> joins_ = [
+            ...     {
+            ...         "field": "Bar",
+            ...         "typename": "bar",
+            ...     }
+            ... ]
+            >>> bbio.get_all_results_as_df("foo", joins=joins_, drop_id=False)
+            _id     fooField1   fooField2   Bar     Bar_barField1   Bar_barField2
+            idFoo1  value       value       idBar1  value           value
+            idFoo2  value       value       idBar2  value           value
         """
         if list_fields and mask_fields:
             raise ValueError(
@@ -247,16 +262,34 @@ class Bubbleio:
 
             if joins:
                 for j_param in joins:
+                    # _id must be keeped to allow joins based on this key
+                    list_fields_ = j_param.get("list_fields")
+                    mask_fields_ = j_param.get("mask_fields")
+                    # So we append "_id" if list_fields is defined and does not contain "_id"
+                    if list_fields_:
+                        list_fields_.append(
+                            "_id"
+                        ) if "_id" not in list_fields_ else list_fields_
+                    # Or we remove it from mask_fields if needed
+                    if mask_fields_:
+                        mask_fields_.remove(
+                            "_id"
+                        ) if "id" in mask_fields_ else mask_fields_
                     foreign_table = self.get_all_results_as_df(
                         j_param["typename"],
-                        list_fields=j_param.get("list_fields"),
-                        mask_fields=j_param.get("mask_fields"),
+                        list_fields=list_fields_,
+                        mask_fields=mask_fields_,
                     )
+                    # Add prefix to avoid confusion
+                    foreign_table = foreign_table.add_prefix(j_param["field"] + "_")
                     df = df.merge(
                         foreign_table,
                         how="left",
                         left_on=j_param["field"],
-                        right_on="_id",
+                        right_on=j_param["field"] + "_id",
                     )
-                    df = df.drop(columns=[j_param["field"]])
+                    # We drop the _id of joined column
+                    df = df.drop(columns=[j_param["field"] + "_id"])
+                    if drop_id:
+                        df = df.drop(columns=[j_param["field"]])
         return df
