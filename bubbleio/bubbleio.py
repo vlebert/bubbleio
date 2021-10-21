@@ -203,7 +203,7 @@ class Bubbleio:
                 "get_results_as_df(): list_fields and mask_fields can't be used at the same time"
             )
         else:
-            df = pd.DataFrame(self.get_retults(typename, limit=limit, cursor=cursor))
+            df = pd.DataFrame(self.get_results(typename, limit=limit, cursor=cursor))
             if list_fields:
                 df = df.loc[:, df.columns.isin(list_fields)]
             elif mask_fields:
