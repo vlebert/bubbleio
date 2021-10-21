@@ -6,6 +6,7 @@ https://manual.bubble.io/core-resources/api/data-api
 
 import requests
 import logging
+import pandas as pd
 
 
 class Bubbleio:
@@ -34,7 +35,9 @@ class Bubbleio:
         return {"Authorization": "Bearer " + self.api_key}
 
     def get(self, typename, limit=None, cursor=None):
-        """Use this call to retrieve a list of things of a given type.
+        """Python implementation of Bubble.io GET API call.
+
+        Use this call to retrieve a list of things of a given type.
         By default, all GET requests return the first 100 items in the list, unless you
         a lesser `limit` argument.
 
@@ -45,13 +48,17 @@ class Bubbleio:
             cursor (str): This is the rank of the first item in the list.
 
         Returns:
-            Dict: Returns a decoded JSON as documented in Bubble.io API documentation :
+            Dict: Returns a decoded JSON (dict) as documented in Bubble.io API documentation. Items of the dict:
 
-                    - 'cursor': This is the rank of the first item in the list,
-                    - 'results': The list of the results,
-                    - 'count': This is the number of items in the current response,
-                    - 'remaining': his is the number of remaining items after the current response. Use this for the next call
+                    - cursor: This is the rank of the first item in the list,
+                    - results: The list of the results,
+                    - count: This is the number of items in the current response,
+                    - remaining: his is the number of remaining items after the current response. Use this for the next call
         """
+        self.logger.debug(
+            "GET call on type %s with limit %s and cursor %s"
+            % (typename, limit, cursor)
+        )
         params = {}
         if limit:
             params["limit"] = limit
@@ -64,7 +71,21 @@ class Bubbleio:
         )
         return r.json()["response"]
 
-    def get_all(
+    def get_results(self, typename, limit=None, cursor=None):
+        """Same as get() method, but returns only the results.
+
+        Args:
+            typename (str): The type of "things" you are querying.
+            limit (str): Use `limit` to specify the number of items you want in the response.
+                         The default and maximum allowed is 100. Use cursor to specify where to start.
+            cursor (str): This is the rank of the first item in the list.
+
+        Returns:
+            List: The list of all items of the type.
+        """
+        return self.get(typename, limit=limit, cursor=cursor)["results"]
+
+    def get_all_results(
         self,
         typename,
     ):
@@ -94,3 +115,84 @@ class Bubbleio:
             remaining = response["remaining"]
 
         return records
+
+    def get_results_as_df(
+        self, typename, limit=None, cursor=None, list_fields=None, mask_fields=None
+    ):
+        """Returns results as a Pandas.DataFrame
+
+        Args:
+            typename (str): The type of "things" you are querying.
+            limit (str): Use `limit` to specify the number of items you want in the response.
+                         The default and maximum allowed is 100. Use cursor to specify where to start.
+            cursor (str): This is the rank of the first item in the list.
+            list_fields(list): The list of fields to returns in the DataFrame. All other fields will
+                               be removed from the DataFrame. If None, all fields are returned.
+                               Cant't be use in combination with mask_fields.
+            mask_fields(list): The list of fields to remove from the DataFrame.
+                               Cant't be use in combination with mask_fields.
+
+        Returns:
+            Pandas.DataFrame: The list of all items of the type.
+        """
+        if list_fields and mask_fields:
+            raise ValueError(
+                "get_results_as_df(): list_fields and mask_fields can't be used at the same time"
+            )
+        else:
+            df = pd.DataFrame(self.get_retults(typename, limit=limit, cursor=cursor))
+            if list_fields:
+                df = df.loc[:, df.columns.isin(list_fields)]
+            elif mask_fields:
+                df = df.loc[:, ~df.columns.isin(mask_fields)]
+        return df
+
+    def get_all_results_as_df(
+        self, typename, list_fields=None, mask_fields=None, joins=None
+    ):
+        """Returns all results as a Pandas.DataFrame
+
+        Args:
+            typename (str): The type of "things" you are querying..
+            list_fields(list): The list of fields to returns in the DataFrame. All other fields will
+                                be removed from the DataFrame. If None, all fields are returned.
+                                Cant't be use in combination with mask_fields.
+            mask_fields(list): The list of fields to remove from the DataFrame.
+                                Cant't be use in combination with mask_fields.
+            joins(list): List of dicts giving the parameters of the joins to be made. Dict must have
+                         these Items :
+
+                         - field: Name of the field referencing the foreign table (foreign key)
+                         - typename: Name of the foreign table to be joined
+                         - list_fields: same logic as above
+                         - mask_fields: same logic as above
+
+        Returns:
+            Pandas.DataFrame: The list of all items of the type.
+        """
+        if list_fields and mask_fields:
+            raise ValueError(
+                "get_all_results_as_df(): list_fields and mask_fields can't be used at the same time"
+            )
+        else:
+            df = pd.DataFrame(self.get_all_results(typename))
+            if list_fields:
+                df = df.loc[:, df.columns.isin(list_fields)]
+            elif mask_fields:
+                df = df.loc[:, ~df.columns.isin(mask_fields)]
+
+            if joins:
+                for j_param in joins:
+                    foreign_table = self.get_all_results_as_df(
+                        j_param["typename"],
+                        list_fields=j_param.get("list_fields"),
+                        mask_fields=j_param.get("mask_fields"),
+                    )
+                    df = df.merge(
+                        foreign_table,
+                        how="left",
+                        left_on=j_param["field"],
+                        right_on="_id",
+                    )
+                    df = df.drop(columns=[j_param["field"]])
+        return df
