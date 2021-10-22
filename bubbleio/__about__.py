@@ -28,7 +28,7 @@ __title__ = "Bubbleio"
 __title_clean__ = "".join(e for e in __title__ if e.isalnum())
 __uri__ = "https://github.com/vlebert/bubbleio/"
 
-__version__ = "0.2.5"
+__version__ = "0.3"
 __version_info__ = tuple(
     [
         int(num) if num.isdigit() else num
