@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>bubbleio.bubbleio module &#8212; Bubbleio 0.2.3 documentation</title>
+    <title>bubbleio.bubbleio module &#8212; Bubbleio 0.3 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -249,7 +249,7 @@ The default and maximum allowed is 100. Use cursor to specify where to start.</p
 <span class="gp">&gt;&gt;&gt; </span><span class="n">API_KEY</span> <span class="o">=</span> <span class="s2">&quot;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">API_ROOT</span> <span class="o">=</span> <span class="s2">&quot;https://appname.bubbleapps.io/api/1.1/obj&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bbio</span> <span class="o">=</span> <span class="n">Bubbleio</span><span class="p">(</span><span class="n">API_KEY</span><span class="p">,</span> <span class="n">API_ROOT</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bbio</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;foo_type&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bbio</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fooType&quot;</span><span class="p">)</span>
 <span class="go">{</span>
 <span class="go">    &quot;cursor&quot;: 0,</span>
 <span class="go">    &quot;results&quot;: [</span>
@@ -297,7 +297,7 @@ The default and maximum allowed is 100. Use cursor to specify where to start.</p
 <span class="gp">&gt;&gt;&gt; </span><span class="n">API_KEY</span> <span class="o">=</span> <span class="s2">&quot;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">API_ROOT</span> <span class="o">=</span> <span class="s2">&quot;https://appname.bubbleapps.io/api/1.1/obj&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bbio</span> <span class="o">=</span> <span class="n">Bubbleio</span><span class="p">(</span><span class="n">API_KEY</span><span class="p">,</span> <span class="n">API_ROOT</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bbio</span><span class="o">.</span><span class="n">get_results</span><span class="p">(</span><span class="s2">&quot;foo_type&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bbio</span><span class="o">.</span><span class="n">get_results</span><span class="p">(</span><span class="s2">&quot;fooType&quot;</span><span class="p">)</span>
 <span class="go">[</span>
 <span class="go">    {</span>
 <span class="go">        &quot;foo_field_1&quot;: &quot;value&quot;,</span>
@@ -335,7 +335,7 @@ to get all items</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bubbleio.bubbleio.Bubbleio.get_results_as_df">
-<span class="sig-name descname"><span class="pre">get_results_as_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cursor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">list_fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bubbleio.bubbleio.Bubbleio.get_results_as_df" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_results_as_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cursor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bubbleio.bubbleio.Bubbleio.get_results_as_df" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns results as a Pandas.DataFrame</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -344,11 +344,6 @@ to get all items</p>
 <li><p><strong>limit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Use <cite>limit</cite> to specify the number of items you want in the response.
 The default and maximum allowed is 100. Use cursor to specify where to start.</p></li>
 <li><p><strong>cursor</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – This is the rank of the first item in the list.</p></li>
-<li><p><strong>list_fields</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – The list of fields to returns in the DataFrame. All other fields will
-be removed from the DataFrame. If None, all fields are returned.
-Cant’t be use in combination with mask_fields.</p></li>
-<li><p><strong>mask_fields</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – The list of fields to remove from the DataFrame.
-Cant’t be use in combination with mask_fields.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -358,28 +353,30 @@ Cant’t be use in combination with mask_fields.</p></li>
 <dd class="field-odd"><p>Pandas.DataFrame</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">bubbleio</span> <span class="kn">import</span> <span class="n">Bubbleio</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bbio</span> <span class="o">=</span> <span class="n">Bubbleio</span><span class="p">(</span><span class="n">API_KEY</span><span class="p">,</span> <span class="n">API_ROOT</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bbio</span><span class="o">.</span><span class="n">get_results</span><span class="p">(</span><span class="s2">&quot;fooType&quot;</span><span class="p">)</span>
+<span class="go">_id     fooField1   fooField2   fooBar</span>
+<span class="go">idFoo1  value       value       idBar1</span>
+<span class="go">idFoo2  value       value       idBar2</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bubbleio.bubbleio.Bubbleio.get_all_results_as_df">
-<span class="sig-name descname"><span class="pre">get_all_results_as_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">list_fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bubbleio.bubbleio.Bubbleio.get_all_results_as_df" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_all_results_as_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bubbleio.bubbleio.Bubbleio.get_all_results_as_df" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns all results as a Pandas.DataFrame</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>typename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The type of “things” you are querying..</p></li>
-<li><p><strong>list_fields</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – The list of fields to returns in the DataFrame. All other fields will
-be removed from the DataFrame. If None, all fields are returned.
-Cant’t be use in combination with mask_fields.</p></li>
-<li><p><strong>mask_fields</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – The list of fields to remove from the DataFrame.
-Cant’t be use in combination with mask_fields.</p></li>
 <li><p><strong>joins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – <p>List of dicts giving the parameters of the joins to be made. Dict must have
 these Items :</p>
 <ul>
 <li><p>field: Name of the field referencing the foreign table (foreign key)</p></li>
 <li><p>typename: Name of the foreign table to be joined</p></li>
-<li><p>list_fields: same logic as above</p></li>
-<li><p>mask_fields: same logic as above</p></li>
 </ul>
 </p></li>
 </ul>
@@ -391,6 +388,29 @@ these Items :</p>
 <dd class="field-odd"><p>Pandas.DataFrame</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">bubbleio</span> <span class="kn">import</span> <span class="n">Bubbleio</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bbio</span> <span class="o">=</span> <span class="n">Bubbleio</span><span class="p">(</span><span class="n">API_KEY</span><span class="p">,</span> <span class="n">API_ROOT</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">joins_</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span>    <span class="p">{</span>
+<span class="gp">... </span>        <span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="s2">&quot;fooBar&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;typename&quot;</span><span class="p">:</span> <span class="s2">&quot;barType&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="p">}</span>
+<span class="gp">... </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bbio</span><span class="o">.</span><span class="n">get_results</span><span class="p">(</span><span class="s2">&quot;fooType&quot;</span><span class="p">)</span>
+<span class="go">_id     fooField1   fooField2   fooBar</span>
+<span class="go">idFoo1  value       value       idBar1</span>
+<span class="go">idFoo2  value       value       idBar2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bbio</span><span class="o">.</span><span class="n">get_results</span><span class="p">(</span><span class="s2">&quot;barType&quot;</span><span class="p">)</span>
+<span class="go">_id     barField1   barField2</span>
+<span class="go">idBar1  value       value</span>
+<span class="go">idBar2  value       value</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bbio</span><span class="o">.</span><span class="n">get_all_results_as_df</span><span class="p">(</span><span class="s2">&quot;fooType&quot;</span><span class="p">,</span> <span class="n">joins</span><span class="o">=</span><span class="n">joins_</span><span class="p">,</span> <span class="n">drop_id</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="go">_id     fooField1   fooField2   fooBar  fooBar__id      fooBar_barField1   fooBar_barField2</span>
+<span class="go">idFoo1  value       value       idBar1  idBar1          value              value</span>
+<span class="go">idFoo2  value       value       idBar2  idBar2          value              value</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
