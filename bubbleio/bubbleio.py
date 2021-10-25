@@ -7,6 +7,7 @@ https://manual.bubble.io/core-resources/api/data-api
 import requests
 import logging
 import pandas as pd
+import json
 
 
 class Bubbleio:
@@ -50,7 +51,7 @@ class Bubbleio:
         """
         return {"Authorization": "Bearer " + self.api_key}
 
-    def get(self, typename, limit=None, cursor=None):
+    def get(self, typename, limit=None, cursor=None, constraints=None):
         """Python implementation of Bubble.io GET API call.
 
         Use this call to retrieve a list of things of a given type.
@@ -62,14 +63,18 @@ class Bubbleio:
             limit (str): Use `limit` to specify the number of items you want in the response.
                          The default and maximum allowed is 100. Use cursor to specify where to start.
             cursor (str): This is the rank of the first item in the list.
+            constraints (list): See https://manual.bubble.io/core-resources/api/data-api#search-constraints.
+                                This parameter should be an list of constraints, e.g., objects with a ``key``,
+                                ``constraint_type``, and most of the time a ``value``.
+
 
         Returns:
             Dict: Returns a decoded JSON (dict) as documented in Bubble.io API documentation. Items of the dict:
 
-                    - cursor: This is the rank of the first item in the list,
-                    - results: The list of the results,
-                    - count: This is the number of items in the current response,
-                    - remaining: his is the number of remaining items after the current response. Use this for the next call
+                    - ``cursor``: This is the rank of the first item in the list,
+                    - ``results``: The list of the results,
+                    - ``count``: This is the number of items in the current response,
+                    - ``remaining``: his is the number of remaining items after the current response. Use this for the next call
 
         Examples:
 
@@ -82,19 +87,35 @@ class Bubbleio:
                 "cursor": 0,
                 "results": [
                     {
-                        "foo_field_1": "value",
-                        "foo_field_2": "value",
+                        "foo_field_1": "value1",
+                        "foo_field_2": "value2",
                         "_id": "item1_bubble_id"
                     },
                     {
-                        "foo_field_1": "value",
-                        "foo_field_2": "value",
+                        "foo_field_1": "value3",
+                        "foo_field_2": "value4",
                         "_id": "item2_bubble_id"
                     },
                     ...
                 ],
                 "remaining": 0,
                 "count": 31
+            }
+
+            >>> bbio.get("fooType", constraints=[
+            ...     {"key": "foo_field_1", "value": "value1", "constraint_type":"equals"}
+            ... ])
+            {
+                "cursor": 0,
+                "results": [
+                    {
+                        "foo_field_1": "value1",
+                        "foo_field_2": "value2",
+                        "_id": "item1_bubble_id"
+                    }
+                ],
+                "remaining": 0,
+                "count": 1
             }
         """
         self.logger.debug(
@@ -108,12 +129,16 @@ class Bubbleio:
         if cursor:
             params["cursor"] = cursor
 
+        if constraints:
+            params["constraints"] = json.dumps(constraints)
+
         r = requests.get(
             self.api_root + "/" + typename, headers=self.headers(), params=params
         )
+        r.raise_for_status()
         return r.json()["response"]
 
-    def get_results(self, typename, limit=None, cursor=None):
+    def get_results(self, typename, limit=None, cursor=None, constraints=None):
         """Same as get() method, but returns only the results.
 
         Args:
@@ -121,6 +146,10 @@ class Bubbleio:
             limit (str): Use `limit` to specify the number of items you want in the response.
                          The default and maximum allowed is 100. Use cursor to specify where to start.
             cursor (str): This is the rank of the first item in the list.
+            constraints (list): See https://manual.bubble.io/core-resources/api/data-api#search-constraints.
+                                This parameter should be an list of constraints, e.g., objects with a ``key``,
+                                ``constraint_type``, and most of the time a ``value``.
+                                See :meth:`~bubbleio.bubbleio.Bubbleio.get` example.
 
         Returns:
             List: The list of all items of the type.
@@ -146,22 +175,25 @@ class Bubbleio:
                 ...
             ]
         """
-        return self.get(typename, limit=limit, cursor=cursor)["results"]
+        return self.get(typename, limit=limit, cursor=cursor, constraints=constraints)[
+            "results"
+        ]
 
-    def get_all_results(
-        self,
-        typename,
-    ):
+    def get_all_results(self, typename, constraints=None):
         """Get all intems of one "things" type. The function iterates with limit and cursor
         to get all items
 
         Args:
             typename (str): The type of "things" you are querying.
+            constraints (list): See https://manual.bubble.io/core-resources/api/data-api#search-constraints.
+                                This parameter should be an list of constraints, e.g., objects with a ``key``,
+                                ``constraint_type``, and most of the time a ``value``.
+                                See :meth:`~bubbleio.bubbleio.Bubbleio.get` example.
 
         Returns:
             List: The list of all items of the type.
         """
-        response = self.get(typename)
+        response = self.get(typename, constraints=constraints)
 
         remaining = response["remaining"]
         records = response["results"]
@@ -172,14 +204,14 @@ class Bubbleio:
             self.logger.info(
                 "Querying table %s,  : %s items remaining" % (typename, remaining)
             )
-            response = self.get(typename, cursor=cursor)
+            response = self.get(typename, cursor=cursor, constraints=constraints)
             records.append(response["results"])
             cursor = cursor + 100
             remaining = response["remaining"]
 
         return records
 
-    def get_results_as_df(self, typename, limit=None, cursor=None):
+    def get_results_as_df(self, typename, limit=None, cursor=None, constraints=None):
         """Returns results as a Pandas.DataFrame
 
         Args:
@@ -187,6 +219,10 @@ class Bubbleio:
             limit (str): Use `limit` to specify the number of items you want in the response.
                          The default and maximum allowed is 100. Use cursor to specify where to start.
             cursor (str): This is the rank of the first item in the list.
+            constraints (list): See https://manual.bubble.io/core-resources/api/data-api#search-constraints.
+                                This parameter should be an list of constraints, e.g., objects with a ``key``,
+                                ``constraint_type``, and most of the time a ``value``.
+                                See :meth:`~bubbleio.bubbleio.Bubbleio.get` example.
 
         Returns:
             Pandas.DataFrame: The list of all items of the type.
@@ -200,10 +236,14 @@ class Bubbleio:
             idFoo1  value       value       idBar1
             idFoo2  value       value       idBar2
         """
-        df = pd.DataFrame(self.get_results(typename, limit=limit, cursor=cursor))
+        df = pd.DataFrame(
+            self.get_results(
+                typename, limit=limit, cursor=cursor, constraints=constraints
+            )
+        )
         return df
 
-    def get_all_results_as_df(self, typename, joins=None):
+    def get_all_results_as_df(self, typename, joins=None, constraints=None):
         """Returns all results as a Pandas.DataFrame
 
         Args:
@@ -213,6 +253,10 @@ class Bubbleio:
 
                          - field: Name of the field referencing the foreign table (foreign key)
                          - typename: Name of the foreign table to be joined
+            constraints (list): See https://manual.bubble.io/core-resources/api/data-api#search-constraints.
+                                This parameter should be an list of constraints, e.g., objects with a ``key``,
+                                ``constraint_type``, and most of the time a ``value``.
+                                See :meth:`~bubbleio.bubbleio.Bubbleio.get` example.
 
         Returns:
             Pandas.DataFrame: The list of all items of the type.
@@ -235,12 +279,12 @@ class Bubbleio:
             _id     barField1   barField2
             idBar1  value       value
             idBar2  value       value
-            >>> bbio.get_all_results_as_df("fooType", joins=joins_, drop_id=False)
+            >>> bbio.get_all_results_as_df("fooType", joins=joins_)
             _id     fooField1   fooField2   fooBar  fooBar__id      fooBar_barField1   fooBar_barField2
             idFoo1  value       value       idBar1  idBar1          value              value
             idFoo2  value       value       idBar2  idBar2          value              value
         """
-        df = pd.DataFrame(self.get_all_results(typename))
+        df = pd.DataFrame(self.get_all_results(typename, constraints=constraints))
         if joins:
             for j_param in joins:
                 foreign_table = self.get_all_results_as_df(j_param["typename"])

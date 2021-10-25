@@ -214,7 +214,7 @@ have a custom domain name.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bubbleio.bubbleio.Bubbleio.get">
-<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cursor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bubbleio.bubbleio.Bubbleio.get" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cursor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bubbleio.bubbleio.Bubbleio.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Python implementation of Bubble.io GET API call.</p>
 <p>Use this call to retrieve a list of things of a given type.
 By default, all GET requests return the first 100 items in the list, unless you
@@ -226,16 +226,19 @@ a lesser <cite>limit</cite> argument.</p>
 <li><p><strong>limit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Use <cite>limit</cite> to specify the number of items you want in the response.
 The default and maximum allowed is 100. Use cursor to specify where to start.</p></li>
 <li><p><strong>cursor</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – This is the rank of the first item in the list.</p></li>
+<li><p><strong>constraints</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – See <a class="reference external" href="https://manual.bubble.io/core-resources/api/data-api#search-constraints">https://manual.bubble.io/core-resources/api/data-api#search-constraints</a>.
+This parameter should be an list of constraints, e.g., objects with a <code class="docutils literal notranslate"><span class="pre">key</span></code>,
+<code class="docutils literal notranslate"><span class="pre">constraint_type</span></code>, and most of the time a <code class="docutils literal notranslate"><span class="pre">value</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><p>Returns a decoded JSON (dict) as documented in Bubble.io API documentation. Items of the dict:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>cursor: This is the rank of the first item in the list,</p></li>
-<li><p>results: The list of the results,</p></li>
-<li><p>count: This is the number of items in the current response,</p></li>
-<li><p>remaining: his is the number of remaining items after the current response. Use this for the next call</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cursor</span></code>: This is the rank of the first item in the list,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">results</span></code>: The list of the results,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">count</span></code>: This is the number of items in the current response,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">remaining</span></code>: his is the number of remaining items after the current response. Use this for the next call</p></li>
 </ul>
 </div></blockquote>
 </p>
@@ -254,13 +257,13 @@ The default and maximum allowed is 100. Use cursor to specify where to start.</p
 <span class="go">    &quot;cursor&quot;: 0,</span>
 <span class="go">    &quot;results&quot;: [</span>
 <span class="go">        {</span>
-<span class="go">            &quot;foo_field_1&quot;: &quot;value&quot;,</span>
-<span class="go">            &quot;foo_field_2&quot;: &quot;value&quot;,</span>
+<span class="go">            &quot;foo_field_1&quot;: &quot;value1&quot;,</span>
+<span class="go">            &quot;foo_field_2&quot;: &quot;value2&quot;,</span>
 <span class="go">            &quot;_id&quot;: &quot;item1_bubble_id&quot;</span>
 <span class="go">        },</span>
 <span class="go">        {</span>
-<span class="go">            &quot;foo_field_1&quot;: &quot;value&quot;,</span>
-<span class="go">            &quot;foo_field_2&quot;: &quot;value&quot;,</span>
+<span class="go">            &quot;foo_field_1&quot;: &quot;value3&quot;,</span>
+<span class="go">            &quot;foo_field_2&quot;: &quot;value4&quot;,</span>
 <span class="go">            &quot;_id&quot;: &quot;item2_bubble_id&quot;</span>
 <span class="go">        },</span>
 <span class="go">        ...</span>
@@ -270,11 +273,28 @@ The default and maximum allowed is 100. Use cursor to specify where to start.</p
 <span class="go">}</span>
 </pre></div>
 </div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bbio</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fooType&quot;</span><span class="p">,</span> <span class="n">constraints</span><span class="o">=</span><span class="p">[</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;foo_field_1&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;value1&quot;</span><span class="p">,</span> <span class="s2">&quot;constraint_type&quot;</span><span class="p">:</span><span class="s2">&quot;equals&quot;</span><span class="p">}</span>
+<span class="gp">... </span><span class="p">])</span>
+<span class="go">{</span>
+<span class="go">    &quot;cursor&quot;: 0,</span>
+<span class="go">    &quot;results&quot;: [</span>
+<span class="go">        {</span>
+<span class="go">            &quot;foo_field_1&quot;: &quot;value1&quot;,</span>
+<span class="go">            &quot;foo_field_2&quot;: &quot;value2&quot;,</span>
+<span class="go">            &quot;_id&quot;: &quot;item1_bubble_id&quot;</span>
+<span class="go">        }</span>
+<span class="go">    ],</span>
+<span class="go">    &quot;remaining&quot;: 0,</span>
+<span class="go">    &quot;count&quot;: 1</span>
+<span class="go">}</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bubbleio.bubbleio.Bubbleio.get_results">
-<span class="sig-name descname"><span class="pre">get_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cursor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bubbleio.bubbleio.Bubbleio.get_results" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cursor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bubbleio.bubbleio.Bubbleio.get_results" title="Permalink to this definition">¶</a></dt>
 <dd><p>Same as get() method, but returns only the results.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -283,6 +303,10 @@ The default and maximum allowed is 100. Use cursor to specify where to start.</p
 <li><p><strong>limit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Use <cite>limit</cite> to specify the number of items you want in the response.
 The default and maximum allowed is 100. Use cursor to specify where to start.</p></li>
 <li><p><strong>cursor</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – This is the rank of the first item in the list.</p></li>
+<li><p><strong>constraints</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – See <a class="reference external" href="https://manual.bubble.io/core-resources/api/data-api#search-constraints">https://manual.bubble.io/core-resources/api/data-api#search-constraints</a>.
+This parameter should be an list of constraints, e.g., objects with a <code class="docutils literal notranslate"><span class="pre">key</span></code>,
+<code class="docutils literal notranslate"><span class="pre">constraint_type</span></code>, and most of the time a <code class="docutils literal notranslate"><span class="pre">value</span></code>.
+See <a class="reference internal" href="#bubbleio.bubbleio.Bubbleio.get" title="bubbleio.bubbleio.Bubbleio.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> example.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -317,12 +341,18 @@ The default and maximum allowed is 100. Use cursor to specify where to start.</p
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bubbleio.bubbleio.Bubbleio.get_all_results">
-<span class="sig-name descname"><span class="pre">get_all_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bubbleio.bubbleio.Bubbleio.get_all_results" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_all_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bubbleio.bubbleio.Bubbleio.get_all_results" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all intems of one “things” type. The function iterates with limit and cursor
 to get all items</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>typename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The type of “things” you are querying.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>typename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The type of “things” you are querying.</p></li>
+<li><p><strong>constraints</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – See <a class="reference external" href="https://manual.bubble.io/core-resources/api/data-api#search-constraints">https://manual.bubble.io/core-resources/api/data-api#search-constraints</a>.
+This parameter should be an list of constraints, e.g., objects with a <code class="docutils literal notranslate"><span class="pre">key</span></code>,
+<code class="docutils literal notranslate"><span class="pre">constraint_type</span></code>, and most of the time a <code class="docutils literal notranslate"><span class="pre">value</span></code>.
+See <a class="reference internal" href="#bubbleio.bubbleio.Bubbleio.get" title="bubbleio.bubbleio.Bubbleio.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> example.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The list of all items of the type.</p>
@@ -335,7 +365,7 @@ to get all items</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bubbleio.bubbleio.Bubbleio.get_results_as_df">
-<span class="sig-name descname"><span class="pre">get_results_as_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cursor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bubbleio.bubbleio.Bubbleio.get_results_as_df" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_results_as_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cursor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bubbleio.bubbleio.Bubbleio.get_results_as_df" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns results as a Pandas.DataFrame</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -344,6 +374,10 @@ to get all items</p>
 <li><p><strong>limit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Use <cite>limit</cite> to specify the number of items you want in the response.
 The default and maximum allowed is 100. Use cursor to specify where to start.</p></li>
 <li><p><strong>cursor</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – This is the rank of the first item in the list.</p></li>
+<li><p><strong>constraints</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – See <a class="reference external" href="https://manual.bubble.io/core-resources/api/data-api#search-constraints">https://manual.bubble.io/core-resources/api/data-api#search-constraints</a>.
+This parameter should be an list of constraints, e.g., objects with a <code class="docutils literal notranslate"><span class="pre">key</span></code>,
+<code class="docutils literal notranslate"><span class="pre">constraint_type</span></code>, and most of the time a <code class="docutils literal notranslate"><span class="pre">value</span></code>.
+See <a class="reference internal" href="#bubbleio.bubbleio.Bubbleio.get" title="bubbleio.bubbleio.Bubbleio.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> example.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -366,7 +400,7 @@ The default and maximum allowed is 100. Use cursor to specify where to start.</p
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bubbleio.bubbleio.Bubbleio.get_all_results_as_df">
-<span class="sig-name descname"><span class="pre">get_all_results_as_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bubbleio.bubbleio.Bubbleio.get_all_results_as_df" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_all_results_as_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bubbleio.bubbleio.Bubbleio.get_all_results_as_df" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns all results as a Pandas.DataFrame</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -379,6 +413,10 @@ these Items :</p>
 <li><p>typename: Name of the foreign table to be joined</p></li>
 </ul>
 </p></li>
+<li><p><strong>constraints</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – See <a class="reference external" href="https://manual.bubble.io/core-resources/api/data-api#search-constraints">https://manual.bubble.io/core-resources/api/data-api#search-constraints</a>.
+This parameter should be an list of constraints, e.g., objects with a <code class="docutils literal notranslate"><span class="pre">key</span></code>,
+<code class="docutils literal notranslate"><span class="pre">constraint_type</span></code>, and most of the time a <code class="docutils literal notranslate"><span class="pre">value</span></code>.
+See <a class="reference internal" href="#bubbleio.bubbleio.Bubbleio.get" title="bubbleio.bubbleio.Bubbleio.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> example.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
