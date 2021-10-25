@@ -1,7 +1,12 @@
 # Bubbleio Python API
 
+## Project overview
+
 This python package is a toolset to query Bubble.io API. This package uses [Pandas](https://pandas.pydata.org/)
 DataFrame to returns results.
+
+Pandas.DataFrame lets you query the data, process it, save it (ant later on uptate changes directly to Bubble app with
+this package).
 
 **⚠ Warning**: This project is quite new (october 2021), and breaking changes may appears until version 1.0
 
