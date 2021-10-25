@@ -3,6 +3,8 @@
 This python package is a toolset to query Bubble.io API. This package uses [Pandas](https://pandas.pydata.org/)
 DataFrame to returns results.
 
+**⚠ Warning**: This project is quite new (october 2021), and breaking changes may appears until version 1.0
+
 ## Installation
 
 ```
