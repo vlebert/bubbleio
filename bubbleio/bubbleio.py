@@ -291,10 +291,13 @@ class Bubbleio:
                 # Add prefix to avoid confusion
                 prefix = j_param["field"] + "_"
                 foreign_table = foreign_table.add_prefix(prefix)
-                df = df.merge(
-                    foreign_table,
-                    how="left",
-                    left_on=j_param["field"],
-                    right_on=prefix + "_id",
-                )
+                try:
+                    df = df.merge(
+                        foreign_table,
+                        how="left",
+                        left_on=j_param["field"],
+                        right_on=prefix + "_id",
+                    )
+                except KeyError as e:
+                    self.logger.warning("Join impossible (KeyError): %s" % (e))
         return df
