@@ -205,7 +205,7 @@ class Bubbleio:
                 "Querying table %s,  : %s items remaining" % (typename, remaining)
             )
             response = self.get(typename, cursor=cursor, constraints=constraints)
-            records.append(response["results"])
+            records.extend(response["results"])
             cursor = cursor + 100
             remaining = response["remaining"]
 
