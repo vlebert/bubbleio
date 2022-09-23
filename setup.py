@@ -3,11 +3,11 @@
 from setuptools import find_packages, setup
 
 # package (to get version)
-from bubbleio import __about__
 from pathlib import Path
 
 this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text()
+exec(open(Path("./bubbleio/__about__.py")).read())
 
 setup(
     name="bubbleio",
@@ -24,6 +24,6 @@ setup(
     ),
     include_package_data=True,
     install_requires=[
-        "requests",
+        "requests", "pandas"
     ],
 )
