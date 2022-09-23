@@ -139,3 +139,4 @@ test.ipynb
 *.xlsx
 
 memo.md
+.DS_Store
