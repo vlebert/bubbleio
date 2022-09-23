@@ -11,9 +11,9 @@ exec(open(Path("./bubbleio/__about__.py")).read())
 
 setup(
     name="bubbleio",
-    version=__about__.__version__,
-    author=__about__.__author__,
-    author_email=__about__.__email__,
+    version=__version__,
+    author=__author__,
+    author_email=__email__,
     url="https://github.com/vlebert/bubbleio",
     long_description=long_description,
     long_description_content_type="text/markdown",
