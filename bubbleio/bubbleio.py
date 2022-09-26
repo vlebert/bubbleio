@@ -179,7 +179,13 @@ class Bubbleio:
             "results"
         ]
 
-    def get_all_results(self, typename, constraints=None):
+    def get_all_results(
+        self,
+        typename,
+        constraints=None,
+        progress_callback=None,
+        progress_callback_resolution=0.1,
+    ):
         """Get all intems of one "things" type. The function iterates with limit and cursor
         to get all items
 
@@ -189,25 +195,46 @@ class Bubbleio:
                                 This parameter should be an list of constraints, e.g., objects with a ``key``,
                                 ``constraint_type``, and most of the time a ``value``.
                                 See :meth:`~bubbleio.bubbleio.Bubbleio.get` example.
+            progress_callback: Function to be called to communicate progress
+            progress_callback_resolution: Parameter user to tune the frequency of callback_progress function.
 
         Returns:
             List: The list of all items of the type.
         """
         response = self.get(typename, constraints=constraints)
+        cursor = 100  # Because default limit value is 100
 
         remaining = response["remaining"]
         records = response["results"]
 
-        cursor = 100  # Because default limit value is 100
+        item_count = len(response["results"]) + response["remaining"]
+        item_processed = len(response["results"])
+        progress = item_processed / item_count
+        progress_callback(progress)
+        progress_buffer = progress  # to handle resolution
+
+        self.logger.info("%s items in total. Processing..." % (item_count))
 
         while remaining > 0:
-            self.logger.info(
-                "Querying table %s,  : %s items remaining" % (typename, remaining)
-            )
             response = self.get(typename, cursor=cursor, constraints=constraints)
             records.extend(response["results"])
+            item_processed = cursor + len(response["results"])
+            progress = item_processed / item_count
+
+            if (
+                (progress - progress_buffer) > progress_callback_resolution
+            ) or progress == 1:
+                progress_callback(progress)
+                self.logger.info(
+                    "Progress %s / %s. Callback sent" % (item_processed, item_count)
+                )
+                progress_buffer = progress
+
             cursor = cursor + 100
             remaining = response["remaining"]
+            self.logger.debug(
+                "Querying table %s  : %s items remaining" % (typename, remaining)
+            )
 
         return records
 
@@ -223,6 +250,8 @@ class Bubbleio:
                                 This parameter should be an list of constraints, e.g., objects with a ``key``,
                                 ``constraint_type``, and most of the time a ``value``.
                                 See :meth:`~bubbleio.bubbleio.Bubbleio.get` example.
+            progress_callback: Function to be called to communicate progress
+            progress_callback_resolution: Parameter user to tune the frequency of callback_progress function.
 
         Returns:
             Pandas.DataFrame: The list of all items of the type.
@@ -243,7 +272,14 @@ class Bubbleio:
         )
         return df
 
-    def get_all_results_as_df(self, typename, joins=None, constraints=None):
+    def get_all_results_as_df(
+        self,
+        typename,
+        joins=None,
+        constraints=None,
+        progress_callback=None,
+        progress_callback_resolution=0.1,
+    ):
         """Returns all results as a Pandas.DataFrame
 
         Args:
@@ -284,7 +320,14 @@ class Bubbleio:
             idFoo1  value       value       idBar1  idBar1          value              value
             idFoo2  value       value       idBar2  idBar2          value              value
         """
-        df = pd.DataFrame(self.get_all_results(typename, constraints=constraints))
+        df = pd.DataFrame(
+            self.get_all_results(
+                typename,
+                constraints=constraints,
+                progress_callback=progress_callback,
+                progress_callback_resolution=progress_callback_resolution,
+            )
+        )
         if joins:
             for j_param in joins:
                 foreign_table = self.get_all_results_as_df(j_param["typename"])
