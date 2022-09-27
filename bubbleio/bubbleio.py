@@ -4,6 +4,7 @@ This module contans Bubbleio class to handle Bubble.io API.
 https://manual.bubble.io/core-resources/api/data-api
 """
 
+from os import initgroups
 import requests
 import logging
 import pandas as pd
@@ -346,3 +347,31 @@ class Bubbleio:
                 except KeyError as e:
                     self.logger.warning("Join impossible (KeyError): %s" % (e))
         return df
+
+    def patch(self, typename, unique_id, values, ignore_errors=False):
+        """Python implementaiton of PATCH API call
+
+        To modify a thing, send a PATCH request to the same endpoint you use to retrieve it.
+        The body of the request should be a JSON object with a list of keys and values to modify.
+
+        Args:
+            typename (str): The type of "things" you are querying...
+            unique_id (str): The unique ID of the thing
+            values (dict): Dictionary updated values
+
+        Returns:
+            None
+        """
+
+        self.logger.info("PATCH call on type %s." % (typename))
+
+        r = requests.patch(
+            self.api_root + "/" + typename + "/" + unique_id,
+            headers=self.headers(),
+            json=values,
+        )
+        if r.status_code != 204:
+            if ignore_errors:
+                self.logger.warning("PATCH ERROR %s: %s" % (r.status_code, r.reason))
+            else:
+                r.raise_for_status()
