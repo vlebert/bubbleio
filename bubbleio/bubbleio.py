@@ -209,9 +209,10 @@ class Bubbleio:
 
         item_count = len(response["results"]) + response["remaining"]
         item_processed = len(response["results"])
-        progress = item_processed / item_count
-        progress_callback(progress)
-        progress_buffer = progress  # to handle resolution
+        if progress_callback:
+            progress = item_processed / item_count
+            progress_callback(progress)
+            progress_buffer = progress  # to handle resolution
 
         self.logger.info("%s items in total. Processing..." % (item_count))
 
@@ -222,8 +223,9 @@ class Bubbleio:
             progress = item_processed / item_count
 
             if (
-                (progress - progress_buffer) > progress_callback_resolution
-            ) or progress == 1:
+                ((progress - progress_buffer) > progress_callback_resolution)
+                or progress == 1
+            ) and progress_callback:
                 progress_callback(progress)
                 self.logger.info(
                     "Progress %s / %s. Callback sent" % (item_processed, item_count)
