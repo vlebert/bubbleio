@@ -134,7 +134,7 @@ dmypy.json
 ## Custom
 #############
 
-test.py
+test*.py
 test*.ipynb
 *.xlsx
 

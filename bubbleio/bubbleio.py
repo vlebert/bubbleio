@@ -221,17 +221,18 @@ class Bubbleio:
             response = self.get(typename, cursor=cursor, constraints=constraints)
             records.extend(response["results"])
             item_processed = cursor + len(response["results"])
-            progress = item_processed / item_count
 
-            if (
-                ((progress - progress_buffer) > progress_callback_resolution)
-                or progress == 1
-            ) and progress_callback:
-                progress_callback(progress)
-                self.logger.info(
-                    "Progress %s / %s. Callback sent" % (item_processed, item_count)
-                )
-                progress_buffer = progress
+            if progress_callback:
+                progress = item_processed / item_count
+                # if progress greater than resolution --> callback
+                if (
+                    (progress - progress_buffer) > progress_callback_resolution
+                ) or progress == 1:
+                    progress_callback(progress)
+                    self.logger.info(
+                        "Progress %s / %s. Callback sent" % (item_processed, item_count)
+                    )
+                    progress_buffer = progress
 
             cursor = cursor + 100
             remaining = response["remaining"]
