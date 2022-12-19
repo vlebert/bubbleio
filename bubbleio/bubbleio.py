@@ -376,3 +376,63 @@ class Bubbleio:
                 self.logger.warning("PATCH ERROR %s: %s" % (r.status_code, r.reason))
             else:
                 r.raise_for_status()
+
+    def create(self, typename, values, ignore_errors=False):
+        """Python implementaiton of create API call
+
+        Args:
+            typename (str): The type of "things" you are querying...
+            values (dict): Dictionary updated values
+
+        Returns:
+            None
+        """
+
+        self.logger.info("POST (create) call on type %s." % (typename))
+
+        r = requests.post(
+            self.api_root + "/" + typename,
+            headers=self.headers(),
+            json=values,
+        )
+        if r.status_code != 204:
+            if ignore_errors:
+                self.logger.warning("POST ERROR %s: %s" % (r.status_code, r.reason))
+            else:
+                r.raise_for_status()
+
+        return r.json()
+
+    def bulk_create(self, typename, values, ignore_errors=False):
+        """Python implementaiton of create API call
+
+        Args:
+            typename (str): The type of "things" you are querying...
+            values (dict): Dictionary updated values
+
+        Returns:
+            None
+        """
+
+        self.logger.info("POST (bulk create) call on type %s." % (typename))
+        self.logger.info("%s items to create. Splitting" % (len(values)))
+
+        headers_ = self.headers()
+        headers_["Content-Type"] = "text/plain"  # required by Bubble.io API
+
+        for i in range(0, len(values), 100):
+            start = i
+            stop = min(i + 100, len(values))
+            data_ = str(
+                "\n".join([json.dumps(item) for item in values[start:stop]])
+            )  # plain text
+
+            self.logger.info("Items %s - %s" % (start, stop))
+            r = requests.post(
+                self.api_root + "/" + typename + "/bulk", headers=headers_, data=data_
+            )
+            if r.status_code != 204:
+                if ignore_errors:
+                    self.logger.warning("POST ERROR %s: %s" % (r.status_code, r.reason))
+                else:
+                    r.raise_for_status()
