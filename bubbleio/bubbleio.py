@@ -4,7 +4,6 @@ This module contans Bubbleio class to handle Bubble.io API.
 https://manual.bubble.io/core-resources/api/data-api
 """
 
-from os import initgroups
 import requests
 import logging
 import pandas as pd
