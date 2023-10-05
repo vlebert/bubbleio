@@ -381,7 +381,7 @@ class Bubbleio:
 
         Args:
             typename (str): The type of "things" you are querying...
-            values (dict): Dictionary updated values
+            values (dict): Dictionary new values
 
         Returns:
             None
@@ -407,7 +407,7 @@ class Bubbleio:
 
         Args:
             typename (str): The type of "things" you are querying...
-            values (dict): Dictionary updated values
+            values (dict): Dictionary new values
 
         Returns:
             None
